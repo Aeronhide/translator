@@ -1,14 +1,36 @@
 import React, { useState } from "react";
-import { Grid, TextField, Button } from "@material-ui/core";
+import { Grid, TextField, Typography, Button } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import Timer from "react-compound-timer";
-const NewComponent = props => <div>{props.children}</div>;
-const Speaker = () => {
+import TimerComponent from "./timerComponent";
+
+const Speaker = ({ time, setTime }) => {
   const [file, setFile] = useState("http://placehold.it/150");
   const changeInput = e => {
-    // console.warn(e.target.value);
     const file = e.target.files[0];
     setFile(URL.createObjectURL(file));
+  };
+  const [timerPause, setTimerPause] = useState(false);
+  const [timerStart, setTimerStart] = useState(false);
+  const [timerReset, setTimerReset] = useState(false);
+  const [newTime, setNewTime] = useState("");
+
+  const pauseTimer = timerPause => {
+    if (timerPause) {
+      setTimerReset(false);
+      setTimerStart(false);
+    }
+  };
+  const startTimer = timerStart => {
+    if (timerStart) {
+      setTimerReset(false);
+      setTimerPause(false);
+    }
+  };
+  const resetTimer = timerReset => {
+    if (timerReset) {
+      setTimerStart(false);
+      setTimerPause(false);
+    }
   };
   return (
     <div className="speaker">
@@ -51,61 +73,39 @@ const Speaker = () => {
                 variant="outlined"
                 label="Time"
                 size="small"
+                onChange={e => setNewTime(e.target.value)}
               />
-              <Timer
-                initialTime={60000}
-                lastUnit="h"
-                timeToUpdate={1}
-                direction="backward"
-                startImmediately={false}
+              <Button
+                variant="contained"
+                className="speaker_actions_timer-box_set-btn"
+                onClick={() => setTime()}
               >
-                {({ start, pause, reset }) => {
-                  return (
-                    <React.Fragment>
-                      <div className="speaker_actions_timer-box_display">
-                        <Timer.Minutes /> m
-                        <Timer.Seconds /> s
-                      </div>
-                      <div className="speaker_actions_timer-box_controls">
-                        <Button
-                          onClick={start}
-                          variant="contained"
-                          className="speaker_actions_timer-box_controls_btn"
-                        >
-                          set
-                        </Button>
-                        <Button
-                          onClick={reset}
-                          variant="contained"
-                          className="speaker_actions_timer-box_controls_btn"
-                        >
-                          reset
-                        </Button>
-                        <Button
-                          onClick={start}
-                          variant="contained"
-                          className="speaker_actions_timer-box_controls_btn"
-                        >
-                          start
-                        </Button>
-                        <Button
-                          onClick={pause}
-                          variant="contained"
-                          className="speaker_actions_timer-box_controls_btn"
-                        >
-                          pause
-                        </Button>
-                      </div>
-                    </React.Fragment>
-                  );
-                }}
-              </Timer>
+                Set
+              </Button>
+              <TimerComponent
+                time={time}
+                showControls={true}
+                startFn={() => setTimerStart(true)}
+                pauseFn={() => setTimerPause(true)}
+                resetFn={() => setTimerReset(true)}
+              />
             </div>
           </div>
         </Grid>
         <Grid item md={4}>
           <div className="speaker_info">
-            <NewComponent />
+            <div className="speaker_info_time">
+              <Typography variant="h6">Speaker time:</Typography>
+              <div className="speaker_info_time_inner">
+                <TimerComponent
+                  time={time}
+                  showTime={true}
+                  startFn={() => setTimerStart(true)}
+                  pauseFn={() => setTimerPause(true)}
+                  resetFn={() => setTimerReset(true)}
+                />
+              </div>
+            </div>
           </div>
         </Grid>
       </Grid>

@@ -24,11 +24,11 @@ const theme = createMuiTheme({
 });
 
 const Translator = () => {
-  // const [activeTimer1, setActiveTimer1] = useState(0);
   const [playingVideo, setPlayingVideo] = useState(false);
   const [mutedVideo, setMutedVideo] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [newVideoUrl, setNewVideoUrl] = useState("");
+  const [speakerTime, setSpeakerTime] = useState(null);
 
   const changeVideoOnMp4 = () => {
     setVideoUrl(require("../assets/video1.mp4"));
@@ -45,9 +45,14 @@ const Translator = () => {
     setPlayingVideo(false);
   };
 
+  const setTime = () => {
+    console.warn("set time");
+    setSpeakerTime(55000);
+  };
+
   useEffect(() => {
     !!newVideoUrl && setVideoUrl(newVideoUrl);
-  }, [newVideoUrl]);
+  }, [newVideoUrl, speakerTime]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -68,6 +73,8 @@ const Translator = () => {
                   clearVideo={stopVideo}
                   muted={mutedVideo}
                   muteVideo={() => setMutedVideo(!mutedVideo)}
+                  speakerTime={speakerTime}
+                  setSpeakerTime={setTime}
                 />
               </div>
             </Grid>

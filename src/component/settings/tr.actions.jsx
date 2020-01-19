@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Typography, TextField } from "@material-ui/core";
 import Speaker from "./speaker";
-const el = <div>qwe</div>;
 
 const Actions = ({
   playFn,
@@ -11,7 +10,12 @@ const Actions = ({
   setVideoUrl,
   setMP4Video,
   muteVideo,
-  muted
+  muted,
+  speakerTime,
+  setSpeakerTime,
+  startTimer,
+  resetTimer,
+  pauseTimer
 }) => (
   <div className="controls">
     <div className="controls_section">
@@ -58,7 +62,7 @@ const Actions = ({
       <Typography variant="h6" className="controls_section_title">
         Speaker's:
       </Typography>
-      <Speaker />
+      <Speaker time={speakerTime} setTime={setSpeakerTime} />
     </div>
   </div>
 );
