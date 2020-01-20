@@ -83,7 +83,7 @@ const Speaker = ({ time, setTime }) => {
                 Set
               </Button>
               <TimerComponent
-                time={time}
+                currentTime={time}
                 showControls={true}
                 startFn={() => setTimerStart(true)}
                 pauseFn={() => setTimerPause(true)}
@@ -98,7 +98,7 @@ const Speaker = ({ time, setTime }) => {
               <Typography variant="h6">Speaker time:</Typography>
               <div className="speaker_info_time_inner">
                 <TimerComponent
-                  time={time}
+                  currentTime={time}
                   showTime={true}
                   startFn={() => setTimerStart(true)}
                   pauseFn={() => setTimerPause(true)}

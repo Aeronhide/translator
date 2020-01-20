@@ -28,7 +28,11 @@ const Translator = () => {
   const [mutedVideo, setMutedVideo] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [newVideoUrl, setNewVideoUrl] = useState("");
-  const [speakerTime, setSpeakerTime] = useState(null);
+  const [speakerTime, setSpeakerTime] = useState({
+    h: 0,
+    m: 0,
+    s: 0
+  });
 
   const changeVideoOnMp4 = () => {
     setVideoUrl(require("../assets/video1.mp4"));
@@ -47,7 +51,11 @@ const Translator = () => {
 
   const setTime = () => {
     console.warn("set time");
-    setSpeakerTime(55000);
+    setSpeakerTime({
+      h: 0,
+      m: 1,
+      s: 0
+    });
   };
 
   useEffect(() => {
