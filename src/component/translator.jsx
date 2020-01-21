@@ -45,14 +45,14 @@ const Translator = () => {
     setPlayingVideo(false);
   };
 
-  const setTime = () => {
+  const setTime = newTime => {
     console.warn("set time");
-    setSpeakerTime(55000);
+    setSpeakerTime(newTime);
   };
 
   useEffect(() => {
     !!newVideoUrl && setVideoUrl(newVideoUrl);
-  }, [newVideoUrl, speakerTime]);
+  }, [newVideoUrl]);
 
   return (
     <ThemeProvider theme={theme}>

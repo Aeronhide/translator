@@ -11,15 +11,17 @@ const TimerComponent = ({
   pauseFn
 }) => (
   <Timer
-    initialTime={time && 0}
+    initialTime={55000}
     lastUnit="h"
     timeToUpdate={1}
     direction="backward"
+    onStart={() => console.warn("On Start action of timer")}
     startImmediately={false}
   >
     {({ start, pause, reset }) => {
       return (
         <React.Fragment>
+          {console.warn("timerComponent", time)}
           {showTime ? (
             <div className="speaker_actions_timer-box_display">
               <Timer.Minutes /> m {""}
@@ -28,24 +30,24 @@ const TimerComponent = ({
           ) : (
             ""
           )}
-          {showControls ? (
+          {!showControls ? (
             <div className="speaker_actions_timer-box_controls">
               <Button
-                onClick={() => resetFn(reset)}
+                onClick={reset}
                 variant="contained"
                 className="speaker_actions_timer-box_controls_btn"
               >
                 reset
               </Button>
               <Button
-                onClick={() => startFn(start)}
+                onClick={start}
                 variant="contained"
                 className="speaker_actions_timer-box_controls_btn"
               >
                 start
               </Button>
               <Button
-                onClick={() => pauseFn(pause)}
+                onClick={pause}
                 variant="contained"
                 className="speaker_actions_timer-box_controls_btn"
               >

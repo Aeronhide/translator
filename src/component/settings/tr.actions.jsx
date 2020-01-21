@@ -18,6 +18,7 @@ const Actions = ({
   pauseTimer
 }) => (
   <div className="controls">
+    {console.warn("tr.actions", speakerTime)}
     <div className="controls_section">
       <Typography variant="h6" className="controls_section_title">
         Video:

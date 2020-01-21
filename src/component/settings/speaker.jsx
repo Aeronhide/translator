@@ -32,6 +32,9 @@ const Speaker = ({ time, setTime }) => {
       setTimerPause(false);
     }
   };
+  {
+    console.warn("Speaker", time);
+  }
   return (
     <div className="speaker">
       <Grid container>
@@ -78,7 +81,7 @@ const Speaker = ({ time, setTime }) => {
               <Button
                 variant="contained"
                 className="speaker_actions_timer-box_set-btn"
-                onClick={() => setTime()}
+                onClick={() => setTime(newTime)}
               >
                 Set
               </Button>
