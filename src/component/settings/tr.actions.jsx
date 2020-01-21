@@ -13,12 +13,10 @@ const Actions = ({
   muted,
   speakerTime,
   setSpeakerTime,
-  startTimer,
-  resetTimer,
-  pauseTimer
+  paused,
+  setPaused
 }) => (
   <div className="controls">
-    {console.warn("tr.actions", speakerTime)}
     <div className="controls_section">
       <Typography variant="h6" className="controls_section_title">
         Video:
@@ -63,7 +61,12 @@ const Actions = ({
       <Typography variant="h6" className="controls_section_title">
         Speaker's:
       </Typography>
-      <Speaker time={speakerTime} setTime={setSpeakerTime} />
+      <Speaker
+        time={speakerTime}
+        setTime={setSpeakerTime}
+        setPaused={setPaused}
+        paused={paused}
+      />
     </div>
   </div>
 );

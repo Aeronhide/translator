@@ -1,40 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, TextField, Typography, Button } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TimerComponent from "./timerComponent";
 
-const Speaker = ({ time, setTime }) => {
+const Speaker = ({ time, setTime, paused, setPaused }) => {
   const [file, setFile] = useState("http://placehold.it/150");
   const changeInput = e => {
     const file = e.target.files[0];
     setFile(URL.createObjectURL(file));
   };
-  const [timerPause, setTimerPause] = useState(false);
-  const [timerStart, setTimerStart] = useState(false);
-  const [timerReset, setTimerReset] = useState(false);
-  const [newTime, setNewTime] = useState("");
+  const [newTime, setNewTime] = useState({
+    minutes: "",
+    seconds: ""
+  });
 
-  const pauseTimer = timerPause => {
-    if (timerPause) {
-      setTimerReset(false);
-      setTimerStart(false);
-    }
+  const insertNewTime = e => {
+    const { name, value } = e.target;
+    setNewTime({
+      ...newTime,
+      [name]: value.length !== 0 ? value : 0
+    });
   };
-  const startTimer = timerStart => {
-    if (timerStart) {
-      setTimerReset(false);
-      setTimerPause(false);
-    }
+  const setInsertedTime = () => {
+    setTime(newTime);
+    setNewTime({
+      minutes: "",
+      seconds: ""
+    });
   };
-  const resetTimer = timerReset => {
-    if (timerReset) {
-      setTimerStart(false);
-      setTimerPause(false);
-    }
-  };
-  {
-    console.warn("Speaker", time);
-  }
+
   return (
     <div className="speaker">
       <Grid container>
@@ -74,25 +68,37 @@ const Speaker = ({ time, setTime }) => {
               <TextField
                 className="speaker_actions_timer-box_set-field"
                 variant="outlined"
-                label="Time"
+                label="Minutes"
+                name="minutes"
                 size="small"
-                onChange={e => setNewTime(e.target.value)}
+                onChange={insertNewTime}
+                value={newTime.minutes}
+              />
+              <TextField
+                className="speaker_actions_timer-box_set-field"
+                variant="outlined"
+                label="Seconds"
+                name="seconds"
+                size="small"
+                onChange={insertNewTime}
+                value={newTime.seconds}
               />
               <Button
                 variant="contained"
+                size="small"
                 className="speaker_actions_timer-box_set-btn"
-                onClick={() => setTime(newTime)}
+                onClick={setInsertedTime}
               >
                 Set
               </Button>
-              <TimerComponent
-                time={time}
-                showControls={true}
-                startFn={() => setTimerStart(true)}
-                pauseFn={() => setTimerPause(true)}
-                resetFn={() => setTimerReset(true)}
-              />
             </div>
+            <TimerComponent
+              time={time}
+              setTime={setTime}
+              paused={paused}
+              setPaused={setPaused}
+              showControls={true}
+            />
           </div>
         </Grid>
         <Grid item md={4}>
@@ -102,10 +108,10 @@ const Speaker = ({ time, setTime }) => {
               <div className="speaker_info_time_inner">
                 <TimerComponent
                   time={time}
+                  setTime={setTime}
+                  setPaused={setPaused}
+                  paused={paused}
                   showTime={true}
-                  startFn={() => setTimerStart(true)}
-                  pauseFn={() => setTimerPause(true)}
-                  resetFn={() => setTimerReset(true)}
                 />
               </div>
             </div>

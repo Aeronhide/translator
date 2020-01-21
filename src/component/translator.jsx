@@ -28,7 +28,12 @@ const Translator = () => {
   const [mutedVideo, setMutedVideo] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [newVideoUrl, setNewVideoUrl] = useState("");
-  const [speakerTime, setSpeakerTime] = useState(null);
+  const [speakerTime, setSpeakerTime] = useState({
+    // hours: 0,
+    minutes: 0,
+    seconds: 0
+  });
+  const [paused, setPaused] = useState(false);
 
   const changeVideoOnMp4 = () => {
     setVideoUrl(require("../assets/video1.mp4"));
@@ -45,14 +50,15 @@ const Translator = () => {
     setPlayingVideo(false);
   };
 
-  const setTime = newTime => {
-    console.warn("set time");
-    setSpeakerTime(newTime);
+  const setTime = time => {
+    setSpeakerTime(time);
   };
-
+  const setPauseTimer = () => {
+    setPaused(!paused);
+  };
   useEffect(() => {
     !!newVideoUrl && setVideoUrl(newVideoUrl);
-  }, [newVideoUrl]);
+  }, [newVideoUrl, paused]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -75,6 +81,8 @@ const Translator = () => {
                   muteVideo={() => setMutedVideo(!mutedVideo)}
                   speakerTime={speakerTime}
                   setSpeakerTime={setTime}
+                  paused={paused}
+                  setPaused={setPauseTimer}
                 />
               </div>
             </Grid>

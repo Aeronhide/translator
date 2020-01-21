@@ -1,66 +1,90 @@
-import React from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import { Button } from "@material-ui/core";
-import Timer from "react-compound-timer";
 
 const TimerComponent = ({
   time,
+  setTime,
+  paused,
+  setPaused,
   showControls,
-  showTime,
-  startFn,
-  resetFn,
-  pauseFn
-}) => (
-  <Timer
-    initialTime={55000}
-    lastUnit="h"
-    timeToUpdate={1}
-    direction="backward"
-    onStart={() => console.warn("On Start action of timer")}
-    startImmediately={false}
-  >
-    {({ start, pause, reset }) => {
-      return (
-        <React.Fragment>
-          {console.warn("timerComponent", time)}
-          {showTime ? (
-            <div className="speaker_actions_timer-box_display">
-              <Timer.Minutes /> m {""}
-              <Timer.Seconds /> s
-            </div>
-          ) : (
-            ""
-          )}
-          {!showControls ? (
-            <div className="speaker_actions_timer-box_controls">
-              <Button
-                onClick={reset}
-                variant="contained"
-                className="speaker_actions_timer-box_controls_btn"
-              >
-                reset
-              </Button>
-              <Button
-                onClick={start}
-                variant="contained"
-                className="speaker_actions_timer-box_controls_btn"
-              >
-                start
-              </Button>
-              <Button
-                onClick={pause}
-                variant="contained"
-                className="speaker_actions_timer-box_controls_btn"
-              >
-                pause
-              </Button>
-            </div>
-          ) : (
-            ""
-          )}
-        </React.Fragment>
-      );
-    }}
-  </Timer>
-);
+  showTime
+}) => {
+  const [over, setOver] = useState(false);
+
+  const tick = () => {
+    if (!paused || over) return;
+    // time.hours === 0 &&
+    if (time.minutes === 0 && time.seconds === 0) {
+      setOver(true);
+      // } else if (time.minutes === 0 && time.seconds === 0) {
+      //   setTime({
+      //     hours: time.hours - 1,
+      //     minutes: 59,
+      //     seconds: 59
+      //   });
+    } else if (time.seconds === 0) {
+      setTime({
+        // hours: time.hours,
+        minutes: time.minutes - 1,
+        seconds: 59
+      });
+    } else {
+      setTime({
+        // hours: time.hours,
+        minutes: time.minutes,
+        seconds: time.seconds - 1
+      });
+    }
+  };
+  const reset = () => {
+    setTime({
+      // hours: 0,
+      minutes: 0,
+      seconds: 0
+    });
+  };
+  useEffect(() => {
+    let timerID;
+    if (paused) {
+      timerID = setInterval(() => tick(), 1000);
+      return () => clearInterval(timerID);
+    }
+    return clearInterval(timerID);
+  });
+
+  return (
+    <div className="countdown">
+      {showTime ? (
+        <Fragment>
+          <div className="countdown_time">
+            <Fragment>
+              {time && time.minutes.toString().padStart(2, "0")}
+            </Fragment>
+            :
+            <Fragment>
+              {time && time.seconds.toString().padStart(2, "0")}
+            </Fragment>
+          </div>
+          <div>{over ? "Time's up!" : ""}</div>
+        </Fragment>
+      ) : (
+        ""
+      )}
+      {showControls ? (
+        <Fragment>
+          <Button variant="contained" onClick={setPaused}>
+            {paused ? "Pause" : "Start"}
+          </Button>
+          <Button variant="contained" onClick={reset}>
+            reset
+          </Button>
+        </Fragment>
+      ) : (
+        ""
+      )}
+      {/*<Button onClick={() => reset()}>Restart</Button>*/}
+    </div>
+  );
+};
 
 export default TimerComponent;
