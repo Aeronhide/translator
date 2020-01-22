@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Typography, TextField } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 import Speaker from "./speaker";
 
 const Actions = ({
@@ -14,7 +15,10 @@ const Actions = ({
   speakerTime,
   setSpeakerTime,
   paused,
-  setPaused
+  setPaused,
+  addSpeaker,
+  speakersList,
+  setSpeakerData
 }) => (
   <div className="controls">
     <div className="controls_section">
@@ -61,12 +65,24 @@ const Actions = ({
       <Typography variant="h6" className="controls_section_title">
         Speaker's:
       </Typography>
-      <Speaker
-        time={speakerTime}
-        setTime={setSpeakerTime}
-        setPaused={setPaused}
-        paused={paused}
-      />
+      {speakersList.map((speaker, index) => (
+        <Speaker
+          key={index}
+          speakerData={speaker}
+          time={speaker.time}
+          setSpeakerData={setSpeakerData}
+          setPaused={setPaused}
+          paused={speaker.paused}
+          index={index}
+        />
+      ))}
+      <Button
+        className="controls_section_add-btn"
+        variant="outlined"
+        onClick={addSpeaker}
+      >
+        <AddIcon fontSize="large" />
+      </Button>
     </div>
   </div>
 );

@@ -12,10 +12,11 @@ const TimerComponent = ({
   const [over, setOver] = useState(false);
 
   const tick = () => {
-    if (!paused || over) return;
+    if (paused) return;
     // time.hours === 0 &&
     if (time.minutes === 0 && time.seconds === 0) {
-      setOver(true);
+      setPaused();
+      // paused && setOver(true);
       // } else if (time.minutes === 0 && time.seconds === 0) {
       //   setTime({
       //     hours: time.hours - 1,
@@ -45,18 +46,22 @@ const TimerComponent = ({
   };
   useEffect(() => {
     let timerID;
-    if (paused) {
+    if (!paused) {
       timerID = setInterval(() => tick(), 1000);
       return () => clearInterval(timerID);
     }
-    return clearInterval(timerID);
-  });
+    if (time.minutes === 0 && time.seconds === 0 && paused) {
+      setOver(true);
+    } else {
+      setOver(false);
+    }
+  }, [paused, setOver, time.minutes, time.seconds]);
 
   return (
     <div className="countdown">
       {showTime ? (
-        <Fragment>
-          <div className="countdown_time">
+        <div className="countdown_time">
+          <div className="countdown_time_inner">
             <Fragment>
               {time && time.minutes.toString().padStart(2, "0")}
             </Fragment>
@@ -65,24 +70,31 @@ const TimerComponent = ({
               {time && time.seconds.toString().padStart(2, "0")}
             </Fragment>
           </div>
-          <div>{over ? "Time's up!" : ""}</div>
-        </Fragment>
+          <div className="countdown_time_over">{over ? "Time's up!" : ""}</div>
+        </div>
       ) : (
         ""
       )}
       {showControls ? (
-        <Fragment>
-          <Button variant="contained" onClick={setPaused}>
-            {paused ? "Pause" : "Start"}
+        <div className="countdown_controls">
+          <Button
+            className="countdown_controls_btns"
+            variant="contained"
+            onClick={setPaused}
+          >
+            {paused ? "Start" : "Pause"}
           </Button>
-          <Button variant="contained" onClick={reset}>
+          <Button
+            className="countdown_controls_btns"
+            variant="contained"
+            onClick={reset}
+          >
             reset
           </Button>
-        </Fragment>
+        </div>
       ) : (
         ""
       )}
-      {/*<Button onClick={() => reset()}>Restart</Button>*/}
     </div>
   );
 };

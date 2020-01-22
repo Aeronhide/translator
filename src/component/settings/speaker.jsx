@@ -3,30 +3,57 @@ import { Grid, TextField, Typography, Button } from "@material-ui/core";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TimerComponent from "./timerComponent";
 
-const Speaker = ({ time, setTime, paused, setPaused }) => {
+const initialSpeakerState = {
+  name: "",
+  party: "",
+  time: {
+    minutes: "",
+    seconds: ""
+  }
+};
+
+const Speaker = ({ paused, setPaused, speakerData, setSpeakerData, index }) => {
   const [file, setFile] = useState("http://placehold.it/150");
   const changeInput = e => {
     const file = e.target.files[0];
     setFile(URL.createObjectURL(file));
   };
-  const [newTime, setNewTime] = useState({
-    minutes: "",
-    seconds: ""
+  const [] = useState({
+    name: ""
   });
+  // const [newTime, setNewTime] = useState();
+  const [data, setData] = useState(initialSpeakerState);
 
   const insertNewTime = e => {
     const { name, value } = e.target;
-    setNewTime({
-      ...newTime,
-      [name]: value.length !== 0 ? value : 0
+    setData({
+      ...data,
+      time: {
+        ...data.time,
+        [name]: value
+      }
     });
   };
-  const setInsertedTime = () => {
-    setTime(newTime);
-    setNewTime({
-      minutes: "",
-      seconds: ""
+
+  const infoOnChange = e => {
+    const { name, value } = e.target;
+    setData({
+      ...data,
+      [name]: value
     });
+  };
+
+  const setInsertedData = () => {
+    const newFormattedTime = {};
+    Object.keys(data.time).forEach(key => {
+      if (!data.time[key]) {
+        newFormattedTime[key] = 0;
+      } else {
+        newFormattedTime[key] = parseInt(data.time[key], 10);
+      }
+    });
+    setSpeakerData(data, index);
+    setData(initialSpeakerState);
   };
 
   return (
@@ -56,12 +83,18 @@ const Speaker = ({ time, setTime, paused, setPaused }) => {
                 label="Speaker"
                 size="small"
                 className="speaker_actions_fields_inner"
+                name="name"
+                value={data.name === null ? speakerData.name : data.name}
+                onChange={infoOnChange}
               />
               <TextField
                 variant="outlined"
                 label="Party"
                 size="small"
                 className="speaker_actions_fields_inner"
+                name="party"
+                value={data.party === null ? speakerData.party : data.party}
+                onChange={infoOnChange}
               />
             </div>
             <div className="speaker_actions_timer-box">
@@ -72,7 +105,11 @@ const Speaker = ({ time, setTime, paused, setPaused }) => {
                 name="minutes"
                 size="small"
                 onChange={insertNewTime}
-                value={newTime.minutes}
+                value={
+                  data.time.minutes === null
+                    ? speakerData.time.minutes
+                    : data.time.minutes
+                }
               />
               <TextField
                 className="speaker_actions_timer-box_set-field"
@@ -81,20 +118,24 @@ const Speaker = ({ time, setTime, paused, setPaused }) => {
                 name="seconds"
                 size="small"
                 onChange={insertNewTime}
-                value={newTime.seconds}
+                value={
+                  data.time.seconds === null
+                    ? speakerData.time.seconds
+                    : data.time.seconds
+                }
               />
               <Button
                 variant="contained"
                 size="small"
                 className="speaker_actions_timer-box_set-btn"
-                onClick={setInsertedTime}
+                onClick={setInsertedData}
               >
                 Set
               </Button>
             </div>
             <TimerComponent
-              time={time}
-              setTime={setTime}
+              time={speakerData.time}
+              setTime={() => null}
               paused={paused}
               setPaused={setPaused}
               showControls={true}
@@ -104,11 +145,13 @@ const Speaker = ({ time, setTime, paused, setPaused }) => {
         <Grid item md={4}>
           <div className="speaker_info">
             <div className="speaker_info_time">
-              <Typography variant="h6">Speaker time:</Typography>
+              <Typography className="speaker_info_time_title" variant="h6">
+                Speaker time:
+              </Typography>
               <div className="speaker_info_time_inner">
                 <TimerComponent
-                  time={time}
-                  setTime={setTime}
+                  time={speakerData.time}
+                  setTime={() => null}
                   setPaused={setPaused}
                   paused={paused}
                   showTime={true}
