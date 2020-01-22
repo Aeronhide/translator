@@ -82,6 +82,7 @@ $btn: #949494
 
   &_actions
     padding-left: 15px
+
     &_fields
       display: flex
       margin-bottom: 10px
@@ -91,14 +92,16 @@ $btn: #949494
 
     &_timer-box
       display: flex
-      padding-right: 114px
-      margin-bottom: 10px
+      padding-right: 88px
+      margin-bottom: 22px
 
       &_set-field
-        margin-right: 5px !important
+        margin-right: 10px !important
 
       &_set-btn
         display: flex
+        padding: 0 !important
+        height: 38px
 
       &_controls
         margin-top: 20px
@@ -109,7 +112,22 @@ $btn: #949494
       &_controls-info
         display: none
 
+  &_info
+    &_time
+      display: flex
+      align-items: center
+
+      &_title
+        margin-right: 10px !important
+
+// Timer
 .countdown
   display: flex
   width: 100%
+  font-weight: 600
+  letter-spacing: 2px
+  font-size: 18px
+
+  &_btn
+    margin-right: 15px !important
 

@@ -12,9 +12,11 @@ const TimerComponent = ({
   const [over, setOver] = useState(false);
 
   const tick = () => {
-    if (!paused || over) return;
+    // if (paused || over) return;
     // time.hours === 0 &&
+    console.warn(time.minutes, time.seconds);
     if (time.minutes === 0 && time.seconds === 0) {
+      console.warn("1231");
       setOver(true);
       // } else if (time.minutes === 0 && time.seconds === 0) {
       //   setTime({
@@ -44,12 +46,10 @@ const TimerComponent = ({
     });
   };
   useEffect(() => {
-    let timerID;
     if (paused) {
-      timerID = setInterval(() => tick(), 1000);
+      let timerID = setInterval(() => tick(), 1000);
       return () => clearInterval(timerID);
     }
-    return clearInterval(timerID);
   });
 
   return (
@@ -72,17 +72,20 @@ const TimerComponent = ({
       )}
       {showControls ? (
         <Fragment>
-          <Button variant="contained" onClick={setPaused}>
+          <Button
+            className="countdown_btn"
+            variant="contained"
+            onClick={setPaused}
+          >
             {paused ? "Pause" : "Start"}
           </Button>
-          <Button variant="contained" onClick={reset}>
+          <Button className="countdown_btn" variant="contained" onClick={reset}>
             reset
           </Button>
         </Fragment>
       ) : (
         ""
       )}
-      {/*<Button onClick={() => reset()}>Restart</Button>*/}
     </div>
   );
 };

@@ -18,7 +18,7 @@ const Speaker = ({ time, setTime, paused, setPaused }) => {
     const { name, value } = e.target;
     setNewTime({
       ...newTime,
-      [name]: value.length !== 0 ? value : 0
+      [name]: value
     });
   };
   const setInsertedTime = () => {
@@ -85,7 +85,6 @@ const Speaker = ({ time, setTime, paused, setPaused }) => {
               />
               <Button
                 variant="contained"
-                size="small"
                 className="speaker_actions_timer-box_set-btn"
                 onClick={setInsertedTime}
               >
@@ -104,7 +103,9 @@ const Speaker = ({ time, setTime, paused, setPaused }) => {
         <Grid item md={4}>
           <div className="speaker_info">
             <div className="speaker_info_time">
-              <Typography variant="h6">Speaker time:</Typography>
+              <Typography className="speaker_info_time_title " variant="h6">
+                Speaker time:
+              </Typography>
               <div className="speaker_info_time_inner">
                 <TimerComponent
                   time={time}
