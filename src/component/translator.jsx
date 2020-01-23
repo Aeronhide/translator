@@ -6,7 +6,7 @@ import {
   createMuiTheme,
   Container
 } from "@material-ui/core";
-import localforage from "localforage";
+// import localforage from "localforage";
 import Video from "./tr.player";
 import Actions from "./settings/tr.actions";
 import "./styles.sass";
@@ -22,13 +22,14 @@ const theme = createMuiTheme({
   }
 });
 const initialSpeakerState = {
+  img: null,
   name: "",
   party: "",
   time: {
     minutes: "",
     seconds: ""
   },
-  paused: false
+  paused: true
 };
 
 const Translator = () => {
@@ -36,14 +37,8 @@ const Translator = () => {
   const [mutedVideo, setMutedVideo] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [newVideoUrl, setNewVideoUrl] = useState("");
-  const [speakerTime, setSpeakerTime] = useState({
-    // hours: 0,
-    minutes: 0,
-    seconds: 0
-  });
-  const [paused, setPaused] = useState(true);
-  const [active, setActive] = useState(null);
   const [speakersList, setSpeakers] = useState([initialSpeakerState]);
+  const [speakerIndex, getSpeakerIndex] = useState(null);
 
   const changeVideoOnMp4 = () => {
     setVideoUrl(require("../assets/video1.mp4"));
@@ -60,24 +55,26 @@ const Translator = () => {
     setPlayingVideo(false);
   };
 
-  const setTime = data => {
-    setSpeakerTime(data);
-  };
-
-  const setPauseTimer = () => {
-    setActive(null);
+  const setTime = (data, index) => {
+    const localSpeakersList = [...speakersList];
+    localSpeakersList[index] = {
+      ...localSpeakersList[index],
+      time: data
+    };
+    console.warn({ speakersList, localSpeakersList });
+    setSpeakers(localSpeakersList);
   };
 
   const addSpeaker = () => {
+    console.warn("addSpeaker", speakersList);
     setSpeakers([...speakersList, initialSpeakerState]);
   };
 
-  useEffect(() => {
-    !!newVideoUrl && setVideoUrl(newVideoUrl);
-  }, [newVideoUrl, speakerTime]);
+  const setPauseTimer = index => {
+    getSpeakerIndex(index);
+  };
 
   const setSpeakerData = (data, index) => {
-    console.warn(data, index);
     const localSpeakersList = [...speakersList];
     localSpeakersList[index] = {
       ...data
@@ -85,7 +82,23 @@ const Translator = () => {
     setSpeakers(localSpeakersList);
   };
 
-  console.warn(speakersList);
+  const removeSpeaker = index => {
+    console.warn(index);
+    setSpeakers(speakersList.filter((speaker, i) => i !== index));
+  };
+
+  const insertGlobalTime = globalTime => {
+    setSpeakers(
+      speakersList.map(itm => ({
+        ...itm,
+        time: globalTime
+      }))
+    );
+  };
+
+  useEffect(() => {
+    !!newVideoUrl && setVideoUrl(newVideoUrl);
+  }, [newVideoUrl, speakersList]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -106,13 +119,15 @@ const Translator = () => {
                   clearVideo={stopVideo}
                   muted={mutedVideo}
                   muteVideo={() => setMutedVideo(!mutedVideo)}
-                  speakerTime={speakerTime}
                   setSpeakerTime={setTime}
-                  paused={paused}
                   setPaused={setPauseTimer}
                   addSpeaker={addSpeaker}
                   speakersList={speakersList}
                   setSpeakerData={setSpeakerData}
+                  initialSpeakerState={initialSpeakerState}
+                  activeTimerIndex={speakerIndex}
+                  removeSpeaker={removeSpeaker}
+                  insertGlobalTimeToSpeakers={insertGlobalTime}
                 />
               </div>
             </Grid>
@@ -126,6 +141,11 @@ const Translator = () => {
                     videoUrl={videoUrl}
                     playing={playingVideo}
                     muted={mutedVideo}
+                    speakersList={speakersList}
+                    activeTimerIndex={speakerIndex}
+                    setPaused={setPauseTimer}
+                    setSpeakerTime={setTime}
+                    index={speakerIndex}
                   />
                 </div>
               </div>

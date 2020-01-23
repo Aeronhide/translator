@@ -7,10 +7,10 @@ const TimerComponent = ({
   paused,
   setPaused,
   showControls,
-  showTime
+  showTime,
+  showTimeOver
 }) => {
   const [over, setOver] = useState(false);
-
   const tick = () => {
     if (paused) return;
     // time.hours === 0 &&
@@ -70,7 +70,13 @@ const TimerComponent = ({
               {time && time.seconds.toString().padStart(2, "0")}
             </Fragment>
           </div>
-          <div className="countdown_time_over">{over ? "Time's up!" : ""}</div>
+          {showTimeOver ? (
+            <div className="countdown_time_over">
+              {over ? "Time's up!" : ""}
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       ) : (
         ""

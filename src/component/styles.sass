@@ -1,5 +1,6 @@
 // Colors
 $btn: #949494
+$timerBg: rgba(255, 255, 255, 0.59)
 
 // Main
 .tr
@@ -26,7 +27,7 @@ $btn: #949494
           margin-right: 15px
 
         &_add-btn
-          width: 100% !important
+          width: 85% !important
           padding: 10px
           border-style: dotted
           color: #434c56
@@ -43,6 +44,10 @@ $btn: #949494
 // Speaker
 .speaker
   margin-bottom: 40px
+
+  &:hover
+    .remove-speaker-btn
+      display: flex
 
   &_logo
     position: relative
@@ -90,6 +95,7 @@ $btn: #949494
 
   &_actions
     padding-left: 15px
+
     &_fields
       display: flex
       margin-bottom: 10px
@@ -119,9 +125,41 @@ $btn: #949494
         display: none
 
   &_info
+    position: relative
+
     &_time
       display: flex
       align-items: center
+
+    &_line
+      display: flex
+      align-items: center
+
+      &_title
+        padding-right: 10px
+        font-size: 18px !important
+
+      &_data
+        padding-top: 3px
+        font-size: 16px !important
+        font-weight: 400 !important
+
+      &_status
+        width: 50px
+
+        &_img
+          width: 100%
+          height: 100%
+
+    .remove-speaker-btn
+      display: none
+      position: absolute !important
+      padding: 5px !important
+      min-width: 30px !important
+      right: 45px
+      bottom: 0
+      border-radius: 50% !important
+
 
 // Timer
 .countdown
@@ -144,6 +182,36 @@ $btn: #949494
     &_btns
       margin-right: 15px !important
 
+// Video
+.player
+  position: relative
+  transform: translateY(-1px)
 
+  &_footer
+    position: absolute
+    bottom: 15px
+    left: 15px
+
+    .tr-single
+      display: flex
+
+// Video speaker
+.player-speaker
+  display: flex
+  background: $timerBg
+  border-radius: 4px
+  padding: 7px
+  margin-right: 5px
+
+  &_img
+    max-width: 20px
+    margin-right: 5px
+
+  .countdown
+    font-size: 14px
+
+    &_time
+      padding-top: 2px
+      margin-left: 5px
 
 
