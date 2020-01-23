@@ -1,26 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Grid, TextField, Typography, Button } from "@material-ui/core";
+import React, { useState } from "react";
+import { Grid, TextField, Typography, Button, Fab } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import walkingGuy from "../../assets/walkingGuy.gif";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TimerComponent from "./timerComponent";
 
-const initialSpeakerState = {
-  name: "",
-  party: "",
-  time: {
-    minutes: "",
-    seconds: ""
-  },
-  paused: true
-};
-
-const Speaker = ({ paused, setPaused, speakerData, setSpeakerData, index }) => {
-  const [file, setFile] = useState("http://placehold.it/150");
+const Speaker = ({
+  setPaused,
+  speakerData,
+  setSpeakerData,
+  index,
+  initialSpeakerState,
+  setTime,
+  activeTimerIndex,
+  removeSpeaker
+}) => {
+  const [data, setData] = useState(initialSpeakerState);
+  // const [file, setFile] = useState(null);
   const changeInput = e => {
     const file = e.target.files[0];
-    setFile(URL.createObjectURL(file));
+    // setFile(URL.createObjectURL(file));
+    setData({
+      ...data,
+      img: URL.createObjectURL(file)
+    });
   };
-  // const [newTime, setNewTime] = useState();
-  const [data, setData] = useState(initialSpeakerState);
 
   const insertNewTime = e => {
     const { name, value } = e.target;
@@ -50,8 +54,14 @@ const Speaker = ({ paused, setPaused, speakerData, setSpeakerData, index }) => {
         newFormattedTime[key] = parseInt(data.time[key], 10);
       }
     });
-    setSpeakerData(data, index);
+    setSpeakerData({ ...data, time: newFormattedTime }, index);
     setData(initialSpeakerState);
+  };
+
+  const setTimeHandle = time => setTime(time, index);
+
+  const setPausedHandle = () => {
+    setPaused(activeTimerIndex === index ? null : index);
   };
 
   return (
@@ -60,19 +70,25 @@ const Speaker = ({ paused, setPaused, speakerData, setSpeakerData, index }) => {
         <Grid item md={2}>
           <div className="speaker_logo">
             <div className="speaker-upload">
-              <label className="speaker-upload_label" htmlFor="logo1">
+              <label className="speaker-upload_label" htmlFor={`logo${index}`}>
                 <EditOutlinedIcon style={{ fontSize: 20 }} />
               </label>
               <input
-                id="logo1"
+                id={`logo${index}`}
                 className="speaker-upload_field"
                 type="file"
                 onChange={changeInput}
               />
             </div>
-            <div className="speaker_logo_img">
-              <img className="speaker_logo_img_inner" src={file} alt="logo" />
-            </div>
+            <img
+              className="speaker_logo_img"
+              src={
+                data.img ||
+                (speakerData.img && data.img) ||
+                "http://placehold.it/150"
+              }
+              alt="logo"
+            />
           </div>
         </Grid>
         <Grid item md={6}>
@@ -135,16 +151,23 @@ const Speaker = ({ paused, setPaused, speakerData, setSpeakerData, index }) => {
             </div>
             <TimerComponent
               time={speakerData.time}
-              setTime={() => null}
-              paused={paused}
-              setPaused={setPaused}
+              setTime={setTimeHandle}
+              paused={activeTimerIndex !== index}
+              setPaused={setPausedHandle}
               showControls={true}
-              index={index}
+              showTimeOver={false}
             />
           </div>
         </Grid>
         <Grid item md={4}>
           <div className="speaker_info">
+            <Button
+              className="remove-speaker-btn"
+              variant="outlined"
+              onClick={() => removeSpeaker(index)}
+            >
+              <CloseIcon fontSize="small" />
+            </Button>
             <div className="speaker_info_time">
               <Typography className="speaker_info_time_title" variant="h6">
                 Speaker time:
@@ -152,14 +175,51 @@ const Speaker = ({ paused, setPaused, speakerData, setSpeakerData, index }) => {
               <div className="speaker_info_time_inner">
                 <TimerComponent
                   time={speakerData.time}
-                  setTime={() => null}
-                  setPaused={setPaused}
-                  paused={paused}
+                  setTime={setTimeHandle}
+                  setPaused={setPausedHandle}
+                  paused={activeTimerIndex !== index}
                   showTime={true}
-                  index={index}
+                  showTimeOver={true}
                 />
               </div>
             </div>
+            <div className="speaker_info_line">
+              <Typography variant="h6" className="speaker_info_line_title">
+                Name:
+              </Typography>
+              <Typography variant="h6" className="speaker_info_line_data">
+                {speakerData.name
+                  ? speakerData.name
+                  : data.name.length !== 0
+                  ? data.name
+                  : "--"}
+              </Typography>
+            </div>
+            <div className="speaker_info_line">
+              <Typography variant="h6" className="speaker_info_line_title">
+                Party:
+              </Typography>
+              <Typography variant="h6" className="speaker_info_line_data">
+                {speakerData.party
+                  ? speakerData.party
+                  : data.party.length !== 0
+                  ? data.party
+                  : "--"}
+              </Typography>
+            </div>
+            {activeTimerIndex === index ? (
+              <div className="speaker_info_line">
+                <div className="speaker_info_line_status">
+                  <img
+                    className="speaker_info_line_status_img"
+                    src={walkingGuy}
+                    alt="speaker"
+                  />
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </Grid>
       </Grid>
