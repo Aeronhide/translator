@@ -25,6 +25,12 @@ $btn: #949494
         &_field
           margin-right: 15px
 
+        &_add-btn
+          width: 100% !important
+          padding: 10px
+          border-style: dotted
+          color: #434c56
+
   &_video
     padding-left: 15px
 
@@ -36,11 +42,13 @@ $btn: #949494
 
 // Speaker
 .speaker
+  margin-bottom: 40px
+
   &_logo
     position: relative
     width: 100%
     display: flex
-    justify-content: center
+    justify-content: flex-start
     border-radius: 4px
 
     .speaker-upload
@@ -77,30 +85,36 @@ $btn: #949494
 
     &_img
       max-width: 100%
-      max-height: 100%
+      max-height: 150px
       border-radius: 4px
+
+      &_inner
+        height: 100%
+        width: 100%
+        border-radius: 4px
+
+
 
   &_actions
     padding-left: 15px
-
+    padding-right: 20px
     &_fields
       display: flex
       margin-bottom: 10px
 
       &_inner
-        margin-right: 10px !important
+        margin-right: 5px !important
+        width: 100%
 
     &_timer-box
       display: flex
-      padding-right: 88px
-      margin-bottom: 22px
+      margin-bottom: 10px
 
       &_set-field
-        margin-right: 10px !important
+        margin-right: 5px !important
 
       &_set-btn
         display: flex
-        padding: 0 !important
         height: 38px
 
       &_controls
@@ -117,17 +131,27 @@ $btn: #949494
       display: flex
       align-items: center
 
-      &_title
-        margin-right: 10px !important
-
 // Timer
 .countdown
   display: flex
   width: 100%
-  font-weight: 600
-  letter-spacing: 2px
-  font-size: 18px
 
-  &_btn
-    margin-right: 15px !important
+  &_time
+    display: flex
+    margin-left: 10px
+    font-weight: 600
+    letter-spacing: 1px
+    font-size: 18px
+
+    &_over
+      padding-left: 10px
+
+  &_controls
+    padding-top: 13px
+
+    &_btns
+      margin-right: 15px !important
+
+
+
 

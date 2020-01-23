@@ -6,8 +6,7 @@ import {
   createMuiTheme,
   Container
 } from "@material-ui/core";
-// import timerImg1 from "../assets/icon1.png";
-// import timerImg2 from "../assets/icon2.png";
+import localforage from "localforage";
 import Video from "./tr.player";
 import Actions from "./settings/tr.actions";
 import "./styles.sass";
@@ -22,6 +21,15 @@ const theme = createMuiTheme({
     subtitle1: font_weight
   }
 });
+const initialSpeakerState = {
+  name: "",
+  party: "",
+  time: {
+    minutes: "",
+    seconds: ""
+  },
+  paused: false
+};
 
 const Translator = () => {
   const [playingVideo, setPlayingVideo] = useState(false);
@@ -33,7 +41,8 @@ const Translator = () => {
     minutes: 0,
     seconds: 0
   });
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(true);
+  const [speakersList, setSpeakers] = useState([initialSpeakerState]);
 
   const changeVideoOnMp4 = () => {
     setVideoUrl(require("../assets/video1.mp4"));
@@ -50,15 +59,32 @@ const Translator = () => {
     setPlayingVideo(false);
   };
 
-  const setTime = time => {
-    setSpeakerTime(time);
+  const setTime = data => {
+    setSpeakerTime(data);
   };
+
   const setPauseTimer = () => {
-    setPaused(!paused);
+    console.warn();
   };
+
+  const addSpeaker = () => {
+    setSpeakers([...speakersList, initialSpeakerState]);
+  };
+
   useEffect(() => {
     !!newVideoUrl && setVideoUrl(newVideoUrl);
-  }, [newVideoUrl, paused]);
+  }, [newVideoUrl, speakerTime]);
+
+  const setSpeakerData = (data, index) => {
+    console.warn(data, index);
+    const localSpeakersList = [...speakersList];
+    localSpeakersList[index] = {
+      ...data
+    };
+    setSpeakers(localSpeakersList);
+  };
+
+  console.warn(speakersList);
 
   return (
     <ThemeProvider theme={theme}>
@@ -83,6 +109,9 @@ const Translator = () => {
                   setSpeakerTime={setTime}
                   paused={paused}
                   setPaused={setPauseTimer}
+                  addSpeaker={addSpeaker}
+                  speakersList={speakersList}
+                  setSpeakerData={setSpeakerData}
                 />
               </div>
             </Grid>
